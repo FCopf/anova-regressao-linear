@@ -1,1 +1,3 @@
-# anova-regressao-linear
+Para atualizar pelo terminal
+
+quarto publish gh-pages

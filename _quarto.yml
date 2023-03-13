@@ -1,0 +1,51 @@
+project:
+  type: book
+  output-dir: docs
+  execute-dir: project
+
+book:
+  title: "Modelos de ANOVA e Regressão Linear"
+  author: 
+   - Fabio Cop, Unifesp, fcferreira@unifesp.br
+  date: last-modified
+  cover-image: cover.jpg
+  navbar:
+    search: false
+    background: secondary
+    right:
+      - icon: github
+        href: https://github.com/FCopf
+        aria-label: GitHub
+  chapters:
+    - index.qmd
+    - part: qmd/01-anova/00-PART-anova.qmd
+      chapters:
+        - qmd/01-anova/01-anova.qmd
+        # - qmd/01-anova/02-anovabloco.qmd
+        # - qmd/01-anova/03-anovafatorial.qmd
+        # - qmd/01-anova/03-anovaaninhada.qmd
+        # - qmd/01-anova/03-anova_medida_repetida.qmd
+        # - qmd/01-anova/03-ancova.qmd
+    - part: qmd/02-regressao/00-PART-regressao.qmd
+      chapters:
+        - qmd/02-regressao/01-regressao_simples.qmd
+        # - qmd/02-regressao/01-regressao_multipla.qmd
+    
+bibliography: references.bib
+knitr:
+  opts_chunk: 
+    echo: true
+    message: false
+    warning: false
+
+format:
+  html:
+    theme: cosmo
+    code-fold: false
+    toc: true
+    toc-depth: 2
+    code-overflow: wrap
+
+
+#editor: visual
+
