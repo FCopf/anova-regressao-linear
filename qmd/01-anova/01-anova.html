@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Modelos de ANOVA e Regressão Linear - 1&nbsp; Análise de variância de um fator</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../qmd/02-regressao/00-PART-regressao.html" rel="next">
+<link href="../../qmd/01-anova/00-PART-anova.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<link href="../../site_libs/tabwid-1.1.3/tabwid.css" rel="stylesheet">
+<script src="../../site_libs/tabwid-1.1.3/tabwid.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Modelos de ANOVA e Regressão Linear</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/FCopf"><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Análise de variância de um fator</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Apresentação</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../qmd/01-anova/00-PART-anova.html" class="sidebar-item-text sidebar-link">Modelos de ANOVA</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../qmd/01-anova/01-anova.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Análise de variância de um fator</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../qmd/02-regressao/00-PART-regressao.html" class="sidebar-item-text sidebar-link">Modelos de Regressão</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../qmd/02-regressao/01-regressao_simples.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Regressão Linear Simples</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Conteúdo</h2>
+   
+  <ul class="collapse">
+  <li><a href="#o-modelo-da-anova-e-as-hipóteses-estatísticas" id="toc-o-modelo-da-anova-e-as-hipóteses-estatísticas" class="nav-link active" data-scroll-target="#o-modelo-da-anova-e-as-hipóteses-estatísticas"><span class="toc-section-number">1.1</span>  O modelo da ANOVA e as hipóteses estatísticas</a></li>
+  <li><a href="#partição-das-soma-dos-quadrados" id="toc-partição-das-soma-dos-quadrados" class="nav-link" data-scroll-target="#partição-das-soma-dos-quadrados"><span class="toc-section-number">1.2</span>  Partição das Soma dos Quadrados</a></li>
+  <li><a href="#medindo-a-associação-entre-y-e-x" id="toc-medindo-a-associação-entre-y-e-x" class="nav-link" data-scroll-target="#medindo-a-associação-entre-y-e-x"><span class="toc-section-number">1.3</span>  Medindo a associação entre <span class="math inline">\(Y\)</span> e <span class="math inline">\(X\)</span></a></li>
+  <li><a href="#quadrados-médios-e-graus-de-liberdade" id="toc-quadrados-médios-e-graus-de-liberdade" class="nav-link" data-scroll-target="#quadrados-médios-e-graus-de-liberdade"><span class="toc-section-number">1.4</span>  Quadrados médios e graus de liberdade</a></li>
+  <li><a href="#estatística-f-e-teste-de-hipóteses" id="toc-estatística-f-e-teste-de-hipóteses" class="nav-link" data-scroll-target="#estatística-f-e-teste-de-hipóteses"><span class="toc-section-number">1.5</span>  Estatística <span class="math inline">\(F\)</span> e teste de hipóteses</a></li>
+  <li><a href="#um-exemplo-de-anova-os-níveis-de-metais-pesados-afetam-a-diversidade-de-espécies" id="toc-um-exemplo-de-anova-os-níveis-de-metais-pesados-afetam-a-diversidade-de-espécies" class="nav-link" data-scroll-target="#um-exemplo-de-anova-os-níveis-de-metais-pesados-afetam-a-diversidade-de-espécies"><span class="toc-section-number">1.6</span>  Um exemplo de ANOVA: os níveis de metais pesados afetam a diversidade de espécies?</a></li>
+  <li><a href="#testes-a-posteriori-de-comparação-de-médias" id="toc-testes-a-posteriori-de-comparação-de-médias" class="nav-link" data-scroll-target="#testes-a-posteriori-de-comparação-de-médias"><span class="toc-section-number">1.7</span>  Testes a <em>posteriori</em> de comparação de médias</a></li>
+  <li><a href="#ajustando-a-anova-no-r" id="toc-ajustando-a-anova-no-r" class="nav-link" data-scroll-target="#ajustando-a-anova-no-r"><span class="toc-section-number">1.8</span>  Ajustando a ANOVA no R</a></li>
+  <li><a href="#pressupostos-da-anova" id="toc-pressupostos-da-anova" class="nav-link" data-scroll-target="#pressupostos-da-anova"><span class="toc-section-number">1.9</span>  Pressupostos da ANOVA</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-anova" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Análise de variância de um fator</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Pacotes, funções e base de dados utilizadas no capítulo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Pacotes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flextable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Funções:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'scripts/anova_sim.r'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>A <em>Análise de Variância</em> (<strong>ANOVA</strong>) desenvolvida por <a href="https://en.wikipedia.org/wiki/Ronald_Fisher" target="_blank">R. A. Fisher</a> aplica-se à uma classe de desenho experimental em que a variável resposta <span class="math inline">\(Y\)</span> é <em>contínua</em> e a variável explanatória <span class="math inline">\(X\)</span> é <em>categórica</em> com <span class="math inline">\(2\)</span> ou mais níveis. A ANOVA permite testarmos a hipótese de que duas ou mais médias amostrais (<span class="math inline">\(\overline{Y}_i\)</span>) possam ter sido obtidas de uma mesma população estatística com média <span class="math inline">\(\mu\)</span>. Alternativamente, podemos concluir que as médias amostrais diferem umas das outras, de tal forma que devemos assumir que foram amostradas a partir de <strong>diferentes populações estatísticas</strong>, nas quais ao menos um <span class="math inline">\(\mu_i\)</span> seja diferente dos demais. Iremos denominar estas duas possibilidades de <strong>hipótese estatísticas</strong> sobre a relação entre as médias populacionais.</p>
+<section id="o-modelo-da-anova-e-as-hipóteses-estatísticas" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="o-modelo-da-anova-e-as-hipóteses-estatísticas"><span class="header-section-number">1.1</span> O modelo da ANOVA e as hipóteses estatísticas</h2>
+<p>O modelo pode ser representado por:</p>
+<p><span class="math display">\[Y_{ij} = \mu + A_i + \epsilon_{ij}\]</span></p>
+<p>onde <span class="math inline">\(Y_{ij}\)</span> é a variável resposta associada à observação <span class="math inline">\(i\)</span> do tratamento <span class="math inline">\(j\)</span>, <span class="math inline">\(\mu\)</span> representa a média geral e <span class="math inline">\(A_i\)</span> o efeito do tratamento <span class="math inline">\(i\)</span>. O termo <span class="math inline">\(\epsilon_{ij}\)</span> é denominado de <strong>resíduo</strong> (ou <em>erro</em>) associado a cada observação, que assumimos ter distribuição normal com média zero e variância constante.</p>
+<p><span class="math display">\[\epsilon \sim \mathcal{N}(0, \sigma^2)\]</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Hipóteses estatísticas no modelo de ANOVA
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(H_0: \mu_1 = \mu_2 = \mu_3 =.... = \mu_k\)</span> (HIPÓTESE NULA)</p>
+<p><span class="math inline">\(H_a\)</span>: ao menos um par de médias é diferente (HIPÓTESE ALTERNATIVA)</p>
+</div>
+</div>
+<p>A hipótese nula (<span class="math inline">\(H_0\)</span>) define a ausência de diferenças entre as médias populacionais enquanto a hipótese alternativa (<span class="math inline">\(H_a\)</span>) refere-se a qualquer possibilidade diferente de <span class="math inline">\(H_0\)</span>. Se temos exatamente dois níveis em <span class="math inline">\(X\)</span>, a comparação de médias pode ser feita por meio de um teste <span class="math inline">\(t\)</span>. A ANOVA deve ser utilizada quando temos <strong>mais</strong> de dois níveis em <span class="math inline">\(X\)</span>. Neste sentido, o teste <span class="math inline">\(t\)</span> é um caso particular da ANOVA.</p>
+</section>
+<section id="partição-das-soma-dos-quadrados" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="partição-das-soma-dos-quadrados"><span class="header-section-number">1.2</span> Partição das Soma dos Quadrados</h2>
+<p>Ao representarmos a distribuição de uma variável <span class="math inline">\(Y\)</span> contínua em função de uma variável <span class="math inline">\(X\)</span> categórica, geralmente estamos interessados em determinar se os diferentes níveis de <span class="math inline">\(X\)</span> (diferentes grupos) têm médias similares ou se ao menos um dos níveis têm média diferente dos demais. Queremos uma medida que nos permita diferenciar situações como as apresentadas abaixo.</p>
+<div class="cell">
+
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Na figura <span class="math inline">\(A\)</span> todos os grupos são provenientes da mesma distribuição e têm médias aproximadamente iguais (<span class="math inline">\(\overline{Y}_A \approx \overline{Y}_B \approx \overline{Y}_C \approx \overline{Y}_D\)</span>). Na figura <span class="math inline">\(B\)</span> o segundo grupo tem média mais elevada que os demais, e na da figura <span class="math inline">\(C\)</span>, todas as médias parecem ser diferentes entre si (<span class="math inline">\(\overline{Y}_A \ne \overline{Y}_B \ne \overline{Y}_C \ne \overline{Y}_D\)</span>).</p>
+<p>Para mensurar o grau de associação entre <span class="math inline">\(Y\)</span> e <span class="math inline">\(X\)</span> e entender como podemos diferenciar as situações acima, vamos introduzir o processo de <strong>Partição da Soma dos Quadrados</strong>.</p>
+<p>Suponha a situção abaixo:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Notações
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Temos <span class="math inline">\(k = 3\)</span> grupos (<code>A</code>, <code>B</code> ou <code>C</code>) e para cada grupo <span class="math inline">\(n = 5\)</span> observações. Denotamos por <span class="math inline">\(n_{ij}\)</span> o número de observações dentro de cada grupo, em que <span class="math inline">\(i\)</span> é a <em>i-ésima</em> observação (<span class="math inline">\(i = 1\)</span> a <span class="math inline">\(5\)</span>) do <em>j-ésimo</em> grupo (<span class="math inline">\(j = 1\)</span> a <span class="math inline">\(3\)</span> - grupos <code>A</code> ao <code>C</code>). Neste exemplo, o número de observações em cada grupo é o mesmo (<span class="math inline">\(n_1 = n_2 = n_3 = n\)</span>), de modo que o total de observações é dado por:</li>
+</ul>
+<p><span class="math inline">\(N = k \times n = n_1 + n_2 + n_3 = 15\)</span></p>
+<ul>
+<li><p>A média de cada grupo será denotada por <span class="math inline">\(\overline{Y}_j\)</span>, que neste exemplo são: <span class="math inline">\(Y_1 = 20.64\)</span> (grupo <code>A</code>), <span class="math inline">\(Y_2 = 28.68\)</span> (grupo <code>B</code>) e <span class="math inline">\(Y_3 = 12.18\)</span> (grupo <code>C</code>).</p></li>
+<li><p>Vamos denotar por <span class="math inline">\(\overline{\overline{Y}}\)</span> a <strong>Grande Média</strong>, isto é, a média geral de todas as observações independente do grupo de origem.</p></li>
+</ul>
+<p><span class="math display">\[\overline{\overline{Y}} = \sum_{j = 1}^{k}\sum_{i = 1}^{n}\frac{Y_{ij}}{N} = \frac{\overline{Y_1} + \overline{Y_2} + \overline{Y_3}}{3} = 20.5\]</span></p>
+</div>
+</div>
+<p>Podemos agora observar estes elementos no gráfico de dispersão.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Em seguida, precisamos calcular <span class="math inline">\(3\)</span> quantias, a <strong>Soma dos Quadrados Totais</strong> (<span class="math inline">\(SQ_{Total}\)</span>), a <strong>Soma dos Quadrados dos Tratamentos</strong> <span class="math inline">\(SQ_{Trat}\)</span> e a <strong>Soma dos Quadrados dos Resíduos</strong> <span class="math inline">\(SQ_{Res}\)</span>.</p>
+<ol type="i">
+<li><strong>Soma dos Quadrados Totais</strong> <span class="math inline">\(SQ_{Total}\)</span>: mede as diferenças entre <span class="math inline">\(Y_{ij}\)</span> e <span class="math inline">\(\overline{\overline{Y}}\)</span>. Temos nesta expressão o somatório dos desvios ao quadrado de todas as observações com relação à grand, fig.align=‘center’, fig.width=8, fig.height=4e média <strong>independente</strong> do grupo de origem de cada observação.</li>
+</ol>
+<p><span class="math display">\[SQ_{Total} = \sum_{j = 1}^{k}\sum_{i = 1}^{n}(Y_{ij} - \overline{\overline{Y}})^2\]</span></p>
+<ol start="2" type="i">
+<li><strong>Soma dos Quadrados dos Tratamentos</strong> <span class="math inline">\(SQ_{Trat}\)</span>: mede as diferenças entre as <strong>médias dos tratamentos</strong> <span class="math inline">\(\overline{Y}_j\)</span> e <span class="math inline">\(\overline{\overline{Y}}\)</span>, sendo portanto os desvios ao quadrado da média de cada tratamento subtraída da grande média. <span class="math inline">\(SQ_{Trat}\)</span> também é chamada de soma dos quadrados <strong>entre grupos</strong> ou <strong>entre tratamentos</strong></li>
+</ol>
+<p><span class="math display">\[SQ_{Trat} = \sum_{j = 1}^{k}\sum_{i = 1}^{n_{j}}(\overline{Y}_{j} - \overline{\overline{Y}})^2 = \sum_{j = 1}^{k}n_{j}(\overline{Y}_{j} - \overline{\overline{Y}})^2\]</span></p>
+<ol start="3" type="i">
+<li><strong>Soma dos Quadrados dos Resíduos</strong> <span class="math inline">\(SQ_{Res}\)</span>: mede as diferenças entre cada observação <span class="math inline">\(Y_{ij}\)</span> e a média de seu próprio grupo <span class="math inline">\(\overline{Y}_{j}\)</span>. <span class="math inline">\(SQ_{Res}\)</span> também é chamada de soma dos quadrados <strong>dentro dos grupos</strong> ou <strong>dentro dos tratamentos</strong></li>
+</ol>
+<p><span class="math display">\[SQ_{Res} = \sum_{j = 1}^{k}\sum_{i = 1}^{n_{j}}(Y_{ij} - \overline{Y}_{j})^2\]</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+A característica aditiva das somas dos quadrados
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A partição da soma dos quadrados consiste em decompor a <strong>variação total</strong> do experimento em uma parcela atribuída à variação <strong>entre tratamentos</strong> e outra parcela da variação <strong>dentro dos tratamentos</strong>. Isto é possível pois as somas dos quadrados definidas acima podem ser expressas de forma aditiva como:</p>
+<p><span class="math display">\[SQ_{Total} = SQ_{Trat} + SQ_{Res}\]</span></p>
+<p>Deste modo, é possível demostrar que:</p>
+<p><span class="math inline">\(\sum_{j = 1}^{k}\sum_{i = 1}^{n}(Y_{ij} - \overline{\overline{Y}})^2 = \sum_{j = 1}^{k}n_{j}(Y_{j} - \overline{\overline{Y}})^2 + \sum_{j = 1}^{k}\sum_{i = 1}^{n}(Y_{ij} - \overline{Y}_{j})^2\)</span></p>
+</div>
+</div>
+</section>
+<section id="medindo-a-associação-entre-y-e-x" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="medindo-a-associação-entre-y-e-x"><span class="header-section-number">1.3</span> Medindo a associação entre <span class="math inline">\(Y\)</span> e <span class="math inline">\(X\)</span></h2>
+<p>A característica aditiva das somas dos quadrados pode ser utilizada para mensurar o grau de dependência de <span class="math inline">\(Y_{ij}\)</span> com respeito aos diferentes tratamentos. Compare as duas figuras abaixo:</p>
+<div class="cell">
+
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A soma dos quadrados dentro dos grupos é a mesma nas duas figuras (<span class="math inline">\(SQ_{Res} = 362.6\)</span>). No entanto, na figura da esquerda, em que as médias dos tratamentos são similares (e consequentemente próximas à grande média), a soma dos quadrados entre os tratamentos é muito menor (<span class="math inline">\(SQ_{Trat}^{esquerda} = 15.8\)</span>) que na figura da direita, em que as médias dos tratamentos estão distantes entre si (<span class="math inline">\(SQ_{Trat}^{direita} = 680.8\)</span>). É desta forma que a partição das somas dos quadrados nos permite diferenciar situações em que: i - a média dos grupos <strong>depende</strong> dos níveis do tratamento (figura da direita); de situações em que ii - a média <strong>não depende</strong> dos níveis do tratamento (figura da esquerda).</p>
+</section>
+<section id="quadrados-médios-e-graus-de-liberdade" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="quadrados-médios-e-graus-de-liberdade"><span class="header-section-number">1.4</span> Quadrados médios e graus de liberdade</h2>
+<p>Para que os somatórios dos quadrados expressem uma medida de variação é necessário corriglos em função dos <strong>graus de liberdade (<span class="math inline">\(gl\)</span>)</strong>, obtendo assim <strong>Quadrados médios</strong> dados abaixo:</p>
+<ol type="i">
+<li><strong>Quadrado Médio Total (<span class="math inline">\(QM_{Total}\)</span>)</strong></li>
+</ol>
+<p><span class="math display">\[QM_{Total} = \frac{SQ_{Total}}{gl_{Total}}\]</span></p>
+<p>em que <span class="math inline">\(gl_{Total} = N - 1\)</span></p>
+<ol start="2" type="i">
+<li><strong>Quadrado Médio dos Tratamentos (<span class="math inline">\(QM_{Trat}\)</span>)</strong></li>
+</ol>
+<p><span class="math display">\[QM_{Trat} = \frac{SQ_{Trat}}{gl_{Trat}}\]</span></p>
+<p>em que <span class="math inline">\(gl_{Trat} = k - 1\)</span></p>
+<ol start="3" type="i">
+<li><strong>Quadrado Médio dos Resíduos (<span class="math inline">\(QM_{Res}\)</span>)</strong></li>
+</ol>
+<p><span class="math display">\[QM_{Res} = \frac{SQ_{Res}}{gl_{Res}}\]</span></p>
+<p>em que <span class="math inline">\(gl_{Res} = N-k\)</span></p>
+<p>Assim como a soma dos quadrados, os graus de liberdade também têm característica aditiva.</p>
+<p><span class="math display">\[gl_{Total} = gl_{Trat} + gl_{Res} = (k - 1) + (N - K) = N - 1\]</span></p>
+<p>Os quadrados médios que são estimativas de variâncias. Compare por exemplo a expressão do <span class="math inline">\(QM_{Total}\)</span> com a fórmula da variância amostral (<span class="math inline">\(s^2\)</span>)) e verá que excetuando mudanças de notação, as expressões são essencialmente as mesmas.</p>
+</section>
+<section id="estatística-f-e-teste-de-hipóteses" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="estatística-f-e-teste-de-hipóteses"><span class="header-section-number">1.5</span> Estatística <span class="math inline">\(F\)</span> e teste de hipóteses</h2>
+<p>Uma vez que os quadrados médios são estimativas de variância, uma estatística de teste apropriada é:</p>
+<p><span class="math display">\[F_{calculado} = \frac{QM_{Trat}}{QM_{Res}}\]</span></p>
+<p>A estatística <span class="math inline">\(F\)</span> (ou razão-<span class="math inline">\(F\)</span>) está associada à <strong>distribuição de probabilidades <span class="math inline">\(F\)</span></strong> e nos permite comparar a variância associada ao tratamento com a variância associada aos resíduos. Em mãos do valor de <span class="math inline">\(F_{calculado}\)</span>, o teste de hipóteses é possível após a definição do <strong>nível de significância</strong> <span class="math inline">\(\alpha\)</span>.</p>
+<section id="nível-de-significância" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="nível-de-significância"><span class="header-section-number">1.5.1</span> Nível de significância</h3>
+<p>Assim como discutimos nos testes <span class="math inline">\(Z\)</span> e <span class="math inline">\(t\)</span>, o valor de <span class="math inline">\(\alpha\)</span> estabelece um limite de aceitação para <span class="math inline">\(H_0\)</span>, isto é, um limite a partir do qual a estatística do teste se torna <strong>tão extrema</strong> que nos leva a assumir que <span class="math inline">\(H_0\)</span> é improvável, devendo portanto ser rejeitada em favor de <span class="math inline">\(H_a\)</span>. Este passo é possível pois o valor de <span class="math inline">\(F_{calculado}\)</span> pode ser associado à distribuição <span class="math inline">\(F\)</span> de probabilidades, o que nos permite calcular a probabilidade:</p>
+<p><span class="math display">\[P(F_{calculado}) \le \alpha\]</span></p>
+<p>Para facilitar a notação denominaremos <span class="math inline">\(P(F_{calculado})\)</span> simplesmente de <strong>valor de <span class="math inline">\(p\)</span></strong> expresso em vermelho na figura abaixo:</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tomada de decisão na ANOVA
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Se <span class="math inline">\(p &gt; \alpha\)</span> –&gt; <strong>ACEITAMOS <span class="math inline">\(H_0\)</span></strong></p>
+<p>Se <span class="math inline">\(p \le \alpha\)</span> –&gt; <strong>REJEITAMOS <span class="math inline">\(H_0\)</span></strong> (e assumimos <span class="math inline">\(H_a\)</span> como verdadeira)</p>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Tradicionalmente utiliza-se <span class="math inline">\(\alpha = 0.05\)</span>. Neste caso, <span class="math inline">\(H_0\)</span> seria rejeitada somente de <span class="math inline">\(p \le 0.05\)</span>. Algumas área da medicina por eoutro lado, são tradicionais por utilizar valores de <span class="math inline">\(\alpha = 0.01\)</span>, o que torna o experimento menos sujeito ao <strong>erro do tipo I</strong>. Portanto, outros valores de <span class="math inline">\(\alpha\)</span> diferentes de <span class="math inline">\(0.05\)</span> podem ser escolhidos. O fundamental é que esta decisão, isto é, sobre o nível de significância <span class="math inline">\(\alpha\)</span> a ser adotado, seja feita <strong>previamente</strong> à obtenção dos dados.</p>
+</section>
+</section>
+<section id="um-exemplo-de-anova-os-níveis-de-metais-pesados-afetam-a-diversidade-de-espécies" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="um-exemplo-de-anova-os-níveis-de-metais-pesados-afetam-a-diversidade-de-espécies"><span class="header-section-number">1.6</span> Um exemplo de ANOVA: os níveis de metais pesados afetam a diversidade de espécies?</h2>
+<p>A base de dados <a href="https://github.com/FCopf/visualizacao-de-dados/blob/main/datasets/medley.csv" target="_blank">medley.csv</a> (disponível também em <a href="https://users.monash.edu.au/~murray/BDAR/" target="_blank">Chapter 10 - Single factor classification (ANOVA)</a>) nos permitirá testar a hipótese de que a presença de metais pesados afeta a diversidade de espécies de diatomácias em riachos (<span class="citation" data-cites="medleyclements1998">Medley and Clements (<a href="#ref-medleyclements1998" role="doc-biblioref">1998</a>)</span>; <span class="citation" data-cites="queen2002experimental">Queen, Quinn, and Keough (<a href="#ref-queen2002experimental" role="doc-biblioref">2002</a>)</span>; <span class="citation" data-cites="logan2011biostatistical">Logan (<a href="#ref-logan2011biostatistical" role="doc-biblioref">2011</a>)</span>).</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>medley <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"medley.csv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">STREAM =</span> <span class="fu">factor</span>(STREAM),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">ZINC =</span> <span class="fu">factor</span>(ZINC, <span class="at">ordered =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"BACK"</span>, <span class="st">"LOW"</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"MED"</span>, <span class="st">"HIGH"</span>)))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>medley <span class="sc">%&gt;%</span> <span class="fu">flextable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<div class="tabwid"><style>.cl-a9124edc{}.cl-a90cbe4a{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-a90f1226{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a90f1227{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a90f21f8{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a90f2202{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a90f2203{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a90f2204{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a90f220c{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a90f220d{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-a9124edc"><thead><tr style="overflow-wrap:break-word;"><th class="cl-a90f21f8"><p class="cl-a90f1226"><span class="cl-a90cbe4a">STREAM</span></p></th><th class="cl-a90f21f8"><p class="cl-a90f1226"><span class="cl-a90cbe4a">ZINC</span></p></th><th class="cl-a90f2202"><p class="cl-a90f1227"><span class="cl-a90cbe4a">DIVERSITY</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Eagle</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">BACK</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.27</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Eagle</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">HIGH</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.25</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Eagle</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">HIGH</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.15</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Eagle</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">MED</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.62</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Blue</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">BACK</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.70</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Blue</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">HIGH</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">0.63</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Blue</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">BACK</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.05</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Blue</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">BACK</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.98</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Blue</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">HIGH</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.04</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Blue</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">MED</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.19</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Blue</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">MED</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.10</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Snake</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">BACK</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.20</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Snake</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">MED</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.06</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Snake</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">HIGH</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.90</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Snake</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">HIGH</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.88</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Snake</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">HIGH</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">0.85</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Arkan</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">LOW</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.40</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Arkan</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">LOW</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.18</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Arkan</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">LOW</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.83</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Arkan</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">LOW</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.88</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Arkan</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">MED</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.02</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Arkan</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">MED</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.94</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Arkan</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">LOW</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.10</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Chalk</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">LOW</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.38</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Chalk</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">HIGH</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.43</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Chalk</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">HIGH</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.37</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Chalk</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">MED</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.75</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Chalk</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">LOW</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">2.83</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Splat</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">BACK</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.53</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Splat</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">BACK</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">0.76</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Splat</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">MED</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">0.80</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Splat</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">LOW</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.66</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Splat</span></p></td><td class="cl-a90f2203"><p class="cl-a90f1226"><span class="cl-a90cbe4a">MED</span></p></td><td class="cl-a90f2204"><p class="cl-a90f1227"><span class="cl-a90cbe4a">0.98</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a90f220c"><p class="cl-a90f1226"><span class="cl-a90cbe4a">Splat</span></p></td><td class="cl-a90f220c"><p class="cl-a90f1226"><span class="cl-a90cbe4a">BACK</span></p></td><td class="cl-a90f220d"><p class="cl-a90f1227"><span class="cl-a90cbe4a">1.89</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+<p>A coluna STREAM é uma variável categórica contendo o nome dos <span class="math inline">\(6\)</span> riachos amostrados (Arkan, Blue, Chalk, Eagle, Snake, Splat). A coluna ZINC é uma variável categórica ordinal com <span class="math inline">\(4\)</span> níveis de concentração de zinco na água (BACK &lt; LOW &lt; MED &lt; HIGH). O primeiro nível (BACK) é o nível de referência (<strong>BACKGROUND</strong>). Finalmente, a coluna DIVERSITY é uma variável contínua que contém a diversidade de diatomácieas (medida pelo índice de diversidade de <a href="https://pt.wikipedia.org/wiki/%C3%8Dndice_de_Shannon" target="_blank">Shannon</a> medida de cada uma das 34 amostras.</p>
+<p>Vamos nos concentrar nas variáveis DIVERSITY e ZINC. DIVERSITY será a variável resposta. Em delineamento experimental, dizemos que ZINC é um <strong>tratamento</strong>, isto é, uma condição experimental sob a qual nossa variável dependente <span class="math inline">\(Y\)</span> foi mensurada.</p>
+<p>Para verificarmos a distribuição de diversidade para cada concentração de zinco vamos fazer um boxplot da variável <code>DIVERSITY</code> em função de <code>ZINC</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(medley) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> ZINC, <span class="at">y =</span> DIVERSITY) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">coef =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Vemos que a concentração alta aparenta ter menor diversidade que as demais concentralções. A ANOVA nos permitirá testar esta suposição.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Hipópteses estatísticas
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(H_0: \mu_{BACK} = \mu_{LOW} = \mu_{MED} = \mu_{HIGH}\)</span></p>
+<p><span class="math inline">\(H_a\)</span>: ao menos um <span class="math inline">\(\mu\)</span> é diferente</p>
+<p><span class="math inline">\(\alpha = 0.05\)</span></p>
+</div>
+</div>
+<section id="calculando-a-anova" class="level3" data-number="1.6.1">
+<h3 data-number="1.6.1" class="anchored" data-anchor-id="calculando-a-anova"><span class="header-section-number">1.6.1</span> Calculando a ANOVA</h3>
+<div class="cell">
+
+</div>
+<p><strong>i. Somatórios dos quadrados</strong></p>
+<p><span class="math inline">\(SQ_{Trat} = \sum_{j = 1}^{k}\sum_{i = 1}^{n_{j}}(\overline{Y}_{j} - \overline{\overline{Y}})^2 = 2.5666124\)</span></p>
+<p><span class="math inline">\(SQ_{Res} = \sum_{j = 1}^{k}\sum_{i = 1}^{n_{j}}(Y_{ij} - \overline{Y}_{j})^2 = 6.5164111\)</span></p>
+<p><strong>ii. Graus de liberdade</strong></p>
+<p><span class="math inline">\(gl_{Trat} = k - 1 = 3\)</span></p>
+<p><span class="math inline">\(gl_{Res} = N-k = 30\)</span></p>
+<p><strong>iii. Quadrados médios</strong></p>
+<p><span class="math inline">\(QM_{Trat} = \frac{SQ_{Trat}}{gl_{Trat}} = 0.8555375\)</span></p>
+<p><span class="math inline">\(QM_{Res} = \frac{SQ_{Res}}{gl_{Res}} = 0.2172137\)</span></p>
+<p><strong>iv. Estatística <span class="math inline">\(F\)</span></strong></p>
+<p><span class="math inline">\(F_{calculado} = \frac{QM_{Trat}}{QM_{Res}} = 3.939\)</span></p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tabela da ANOVA**
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As quantias acima são tradicionalmente expressas em uma <strong>Tabela de ANOVA</strong>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>anova_ex <span class="ot">=</span> <span class="fu">anova</span>(<span class="fu">aov</span>(DIVERSITY <span class="sc">~</span> ZINC, <span class="at">data =</span> medley))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tbl-anova" class="anchored">
+
+<div class="tabwid"><style>.cl-a93e2354{}.cl-a938cf58{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-a93b80cc{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a93b8fe0{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a93b8fe1{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a93b8fe2{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-a93e2354"><caption>Tabela&nbsp;1.1:  Tabela da ANOVA para a base de dados medley. </caption><thead><tr style="overflow-wrap:break-word;"><th class="cl-a93b8fe0"><p class="cl-a93b80cc"><span class="cl-a938cf58">Df</span></p></th><th class="cl-a93b8fe0"><p class="cl-a93b80cc"><span class="cl-a938cf58">Sum Sq</span></p></th><th class="cl-a93b8fe0"><p class="cl-a93b80cc"><span class="cl-a938cf58">Mean Sq</span></p></th><th class="cl-a93b8fe0"><p class="cl-a93b80cc"><span class="cl-a938cf58">F value</span></p></th><th class="cl-a93b8fe0"><p class="cl-a93b80cc"><span class="cl-a938cf58">Pr(&gt;F)</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-a93b8fe1"><p class="cl-a93b80cc"><span class="cl-a938cf58">3</span></p></td><td class="cl-a93b8fe1"><p class="cl-a93b80cc"><span class="cl-a938cf58">2.566612</span></p></td><td class="cl-a93b8fe1"><p class="cl-a93b80cc"><span class="cl-a938cf58">0.8555375</span></p></td><td class="cl-a93b8fe1"><p class="cl-a93b80cc"><span class="cl-a938cf58">3.93869</span></p></td><td class="cl-a93b8fe1"><p class="cl-a93b80cc"><span class="cl-a938cf58">0.01755956</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a93b8fe2"><p class="cl-a93b80cc"><span class="cl-a938cf58">30</span></p></td><td class="cl-a93b8fe2"><p class="cl-a93b80cc"><span class="cl-a938cf58">6.516411</span></p></td><td class="cl-a93b8fe2"><p class="cl-a93b80cc"><span class="cl-a938cf58">0.2172137</span></p></td><td class="cl-a93b8fe2"><p class="cl-a93b80cc"><span class="cl-a938cf58"></span></p></td><td class="cl-a93b8fe2"><p class="cl-a93b80cc"><span class="cl-a938cf58"></span></p></td></tr></tbody></table></div>
+</div>
+</div>
+</div>
+<p>em que:</p>
+<p><code>Df</code>: graus de liberdade</p>
+<p><code>Sum Sq</code>: soma dos quadrados</p>
+<p><code>Mean Sq</code>: quadrados médios</p>
+<p><code>F value</code>: valor de <span class="math inline">\(F_{calculado}\)</span></p>
+<p><code>Pr(&gt;F)</code>: valor de p</p>
+<p>A primeira linha refere-se aos valores associados aos tratamentos e a segunda linha aos resíduos. Note que o cômputo de <span class="math inline">\(SQ_{Total}\)</span>, <span class="math inline">\(gl_{Total}\)</span> e <span class="math inline">\(QM_{Total}\)</span> não é realmente necessário.</p>
+</div>
+</div>
+<p>O valor de <span class="math inline">\(p = 3.9386901\)</span> mostrado na <a href="#tbl-anova">Tabela&nbsp;<span>1.1</span></a> acima é refere-se à área na distribuição <span class="math inline">\(F\)</span> que fica acima de <span class="math inline">\(F_{calculado}\)</span>. Poderíamos tentar representar este valor visualmente na distribuição <span class="math inline">\(F\)</span>, mas ele é tão pequeno, que a área em vermelho sequer aparece na figura.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Como conclusão temos que <span class="math inline">\(p \le \alpha\)</span> nos leva a <strong>REJEITAR <span class="math inline">\(H_0\)</span></strong>, pois <span class="math inline">\(F_{calculado}\)</span> é muito extremo para ser resultante da hipótese nula. Neste caso, assumimos que a <span class="math inline">\(H_a\)</span> é mais condizente com a estrutura dos dados, de modo que os tratamentos devem ser provenientes de populações estatísticas com diferentes médias <span class="math inline">\(\mu\)</span>.</p>
+</section>
+</section>
+<section id="testes-a-posteriori-de-comparação-de-médias" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="testes-a-posteriori-de-comparação-de-médias"><span class="header-section-number">1.7</span> Testes a <em>posteriori</em> de comparação de médias</h2>
+<p>Tendo rejeitado <span class="math inline">\(H_0\)</span> concluímos que ao menos 1 par médias é diferente entre si, saber qual(is). Isto nos leva a buscar por um teste que permita fazer comparações <strong>par-a-par</strong>. Os testes a <em>posteriori</em> são uma alternativa.</p>
+<p>Entre os diferentes testes a <em>posteriori</em> na literatura discutiremos o <a href="https://en.wikipedia.org/wiki/Tukey%27s_range_test" target="_blank">teste de Tukey</a>, em que o objetivo é estabelecer uma <em>Diferença Honesta Significativa</em> (<em>DHS</em>) entre um dado par de médias. Esta diferença pode ser calculada por:</p>
+<p><span class="math display">\[DHS_{12} = q\sqrt{\left(\frac{1}{n_1} + \frac{1}{n_2}\right)QM_{Res}}\]</span></p>
+<p>onde:</p>
+<p><span class="math inline">\(q\)</span>: é um valor retirado de uma <strong>tabela estatística da distribuição de amplitude normalizada</strong> (<em>studentized range q table</em>). Para um dado <span class="math inline">\(\alpha\)</span>, o valor desejado de <span class="math inline">\(q\)</span> é encontrado cruzando a linha contento o número <span class="math inline">\(k\)</span> de tratamentos do experimento com a linha contendo os graus de liberdade do resíduo (<span class="math inline">\(gl_{Res}\)</span>). Veja um exemplo desta tabela no link: <a href="https://www.real-statistics.com/statistics-tables/studentized-range-q-table/" target="_blank">Studentized Range q Table</a>;</p>
+<p><span class="math inline">\(QM_{Res}\)</span>: é quadrado médio do resíduo obtido na ANOVA, e;</p>
+<p><span class="math inline">\(n_1\)</span>, <span class="math inline">\(n_2\)</span>: os tamanhos amostrais de cada grupo envolvido na comparação.</p>
+<p>Para um dado nível de significância <span class="math inline">\(\alpha\)</span>, a <span class="math inline">\(DHS\)</span> irá depender basicamente da variação residual do modelo de ANOVA e dos tamanhos amostrais de cada grupo. Em um experimento <strong>balanceado</strong>, isto é, onde <span class="math inline">\(n_1 = n_2 = \cdots = n_k = n\)</span>, a diferença mínima para que um par de médias seja cosiderado diferente é sempre a mesma.</p>
+<p>Em nosso exemplo, a <span class="math inline">\(DHS\)</span> com <span class="math inline">\(\alpha = 0.05\)</span> irá depender se:</p>
+<ol type="i">
+<li>estamos comparando pares em que os dois grupos têm <span class="math inline">\(n = 8\)</span> (BACK e LOW):</li>
+</ol>
+<div class="cell">
+
+</div>
+<p><span class="math inline">\(DHS = 3.845\sqrt{\left(\frac{1}{8} + \frac{1}{8}\right)0.2172137} = 0.896\)</span></p>
+<ol start="2" type="i">
+<li>estamos comparando pares em que os dois grupos têm <span class="math inline">\(n = 9\)</span> (MED e HIGH):</li>
+</ol>
+<div class="cell">
+
+</div>
+<p><span class="math inline">\(DHS = 3.845\sqrt{\left(\frac{1}{9} + \frac{1}{9}\right)0.2172137} = 0.845\)</span></p>
+<ol start="3" type="i">
+<li>estamos comparando pares em que um grupo tem <span class="math inline">\(n = 8\)</span> (BACK e LOW) e o outro <span class="math inline">\(n = 9\)</span> (MED e HIGH):</li>
+</ol>
+<div class="cell">
+
+</div>
+<p><span class="math inline">\(DHS = 3.845\sqrt{\left(\frac{1}{8} + \frac{1}{9}\right)0.2172137} = 0.871\)</span></p>
+<p>De todo modo, note que as diferenças ficam entre 0.845 e 0.896.</p>
+<p>Em nosso exemplo, as médias dos grupos foram:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Dm <span class="ot">=</span> medley <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ZINC) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Medias =</span> <span class="fu">mean</span>(DIVERSITY))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ul>
+<li><p><span class="math inline">\(\overline{Y}_{BACK} = 1.7975\)</span></p></li>
+<li><p><span class="math inline">\(\overline{Y}_{LOW} = 2.0325\)</span></p></li>
+<li><p><span class="math inline">\(\overline{Y}_{MED} = 1.7177778\)</span></p></li>
+<li><p><span class="math inline">\(\overline{Y}_{HIGH} = 1.2777778\)</span></p></li>
+</ul>
+<p>E as diferenças (<span class="math inline">\(\overline{Y}_{maior} - \overline{Y}_{menor}\)</span>) entre elas:</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<div class="tabwid"><style>.cl-a9862c12{}.cl-a980aad0{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-a982afec{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a982aff6{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a982bd52{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a982bd5c{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a982bd5d{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a982bd5e{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a982bd5f{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-a982bd60{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-a9862c12"><thead><tr style="overflow-wrap:break-word;"><th class="cl-a982bd52"><p class="cl-a982afec"><span class="cl-a980aad0">ZINC</span></p></th><th class="cl-a982bd5c"><p class="cl-a982aff6"><span class="cl-a980aad0">BACK</span></p></th><th class="cl-a982bd5c"><p class="cl-a982aff6"><span class="cl-a980aad0">LOW</span></p></th><th class="cl-a982bd5c"><p class="cl-a982aff6"><span class="cl-a980aad0">MED</span></p></th><th class="cl-a982bd5c"><p class="cl-a982aff6"><span class="cl-a980aad0">HIGH</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-a982bd5d"><p class="cl-a982afec"><span class="cl-a980aad0">BACK</span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0">0.00000000</span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0"></span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0"></span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a982bd5d"><p class="cl-a982afec"><span class="cl-a980aad0">LOW</span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0">0.23500000</span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0">0.0000000</span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0"></span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a982bd5d"><p class="cl-a982afec"><span class="cl-a980aad0">MED</span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0">0.07972222</span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0">0.3147222</span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0">0.00</span></p></td><td class="cl-a982bd5e"><p class="cl-a982aff6"><span class="cl-a980aad0"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-a982bd5f"><p class="cl-a982afec"><span class="cl-a980aad0">HIGH</span></p></td><td class="cl-a982bd60"><p class="cl-a982aff6"><span class="cl-a980aad0">0.51972222</span></p></td><td class="cl-a982bd60"><p class="cl-a982aff6"><span class="cl-a980aad0">0.7547222</span></p></td><td class="cl-a982bd60"><p class="cl-a982aff6"><span class="cl-a980aad0">0.44</span></p></td><td class="cl-a982bd60"><p class="cl-a982aff6"><span class="cl-a980aad0">0</span></p></td></tr></tbody></table></div>
+</div>
+</div>
+</section>
+<section id="ajustando-a-anova-no-r" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="ajustando-a-anova-no-r"><span class="header-section-number">1.8</span> Ajustando a ANOVA no R</h2>
+<p>Considere que a tabela em nosso exemplo está no objeto <code>Tab</code>. A ANOVA no R é feita com o comando <code>aov</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ajuste <span class="ot">=</span> <span class="fu">aov</span>(DIVERSITY <span class="sc">~</span> ZINC, <span class="at">data =</span> medley)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ajuste</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+   aov(formula = DIVERSITY ~ ZINC, data = medley)
+
+Terms:
+                    ZINC Residuals
+Sum of Squares  2.566612  6.516411
+Deg. of Freedom        3        30
+
+Residual standard error: 0.4660619
+Estimated effects may be unbalanced</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>A notação <code>Y ~ X</code> será muito utilizada nesta seção sobre modelos lineares e lê-se como <strong><span class="math inline">\(Y\)</span> é função de <span class="math inline">\(X\)</span></strong>.</p>
+</blockquote>
+<p>O comando acima fez os cálculos da ANOVA, isto é, computou as somas dos quadrados, os graus de liberdade, os quadrados médios, o <span class="math inline">\(F_{calculado}\)</span> e o valor de <span class="math inline">\(p\)</span>. Para visualizarmos a tabela da ANOVA fazemos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(ajuste)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: DIVERSITY
+          Df Sum Sq Mean Sq F value  Pr(&gt;F)  
+ZINC       3 2.5666 0.85554  3.9387 0.01756 *
+Residuals 30 6.5164 0.21721                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Note que os resultados coincidem com o que apresentamos anteriormente. Como o valor de <span class="math inline">\(p\)</span> foi menor que <span class="math inline">\(\alpha = 0.05\)</span>, concluimos que a ANOVA foi significativa, isto é, indicou que ao menos um par de médias difere ente si. Podemos fazer o teste a <em>posteriori</em> de Tukey com o comando:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>alfa <span class="ot">=</span> <span class="fl">0.05</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(ajuste, <span class="at">conf.level =</span> <span class="dv">1</span><span class="sc">-</span>alfa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = DIVERSITY ~ ZINC, data = medley)
+
+$ZINC
+                 diff        lwr         upr     p adj
+LOW-BACK   0.23500000 -0.3986367  0.86863665 0.7457444
+MED-BACK  -0.07972222 -0.6955064  0.53606192 0.9847376
+HIGH-BACK -0.51972222 -1.1355064  0.09606192 0.1218677
+MED-LOW   -0.31472222 -0.9305064  0.30106192 0.5153456
+HIGH-LOW  -0.75472222 -1.3705064 -0.13893808 0.0116543
+HIGH-MED  -0.44000000 -1.0373984  0.15739837 0.2095597</code></pre>
+</div>
+</div>
+<p>O resultado apresenta todas as comparações possíveis entre os grupos, mostrando as diferenças de médias, seus intervalos de confiança a <span class="math inline">\(95\%\)</span> e os valores de <span class="math inline">\(p\)</span>, indicando quais destas diferenças são significativas, isto é, <span class="math inline">\(p \le \alpha\)</span>. Estes resultados nos permitem concluir novamente que somente o par <code>HIGH-LOW</code> difere entre si, pois <code>p adj &lt; 0.05</code>.</p>
+<p>Um gráfico facilita a visualização das comparações, sobretudo em situações com muitos pares de médias envolvidos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">TukeyHSD</span>(ajuste))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Neste gráfico, as comparações em que o intervalo de confiança <strong>não inclui o zero</strong>, são consideradas significativas. Novamente, vemos que somente o grupo <code>C-B</code> tem médias estatisticamente diferentes.</p>
+</section>
+<section id="pressupostos-da-anova" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="pressupostos-da-anova"><span class="header-section-number">1.9</span> Pressupostos da ANOVA</h2>
+<p>Os pressupostos da ANOVA são:</p>
+<ol type="1">
+<li><p>Os observação são independentes e;</p></li>
+<li><p>A variância dos resíduos é homogênea e;</p></li>
+<li><p>Os resíduos têm distribuição normal com média <span class="math inline">\(0\)</span> e variância <span class="math inline">\(\sigma^2\)</span>.</p></li>
+</ol>
+<p>Vamos inicialmente testar o pressuposto de homogeneidade de variâncias com um teste <span class="math inline">\(F\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">tapply</span>(medley<span class="sc">$</span>DIVERSITY, medley<span class="sc">$</span>ZINC, var)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>var_max <span class="ot">=</span> <span class="fu">max</span>(v)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>var_min <span class="ot">=</span> <span class="fu">min</span>(v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>medley <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(ZINC) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Var =</span> <span class="fu">var</span>(DIVERSITY))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note que a maior variância é <span class="math inline">\(0.2530194\)</span> e a menor <span class="math inline">\(0.1822194\)</span>.</p>
+<p>O teste <span class="math inline">\(F\)</span> consiste em dividir a maior variância pela menor:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(medley<span class="sc">$</span>DIVERSITY[medley<span class="sc">$</span>ZINC <span class="sc">==</span> <span class="st">"MED"</span>], medley<span class="sc">$</span>DIVERSITY[medley<span class="sc">$</span>ZINC <span class="sc">==</span> <span class="st">"HIGH"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  medley$DIVERSITY[medley$ZINC == "MED"] and medley$DIVERSITY[medley$ZINC == "HIGH"]
+F = 1.3885, num df = 8, denom df = 8, p-value = 0.6534
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.3132103 6.1557698
+sample estimates:
+ratio of variances 
+          1.388543 </code></pre>
+</div>
+</div>
+<p>A maior variância foi 1.39 vezes maior que a menor variância e o test F sugere que esta diferença é <strong>não-significativa</strong> a <span class="math inline">\(5\%\)</span> (<span class="math inline">\(p &lt; 0.05\)</span>). Isto indica que as variâncias são homogêneas.</p>
+<p>A verificação visual de que as variâncias são homogêneas pode também ser inspecionada pelo <strong>gráfico de resíduos</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">rstudent</span>(ajuste) <span class="sc">~</span> <span class="fu">fitted</span>(ajuste), <span class="at">pch =</span> <span class="dv">16</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Em seguida avaliamos o histograma dos resíduos e aplicamos um teste de normalidade (ex. teste de Shapiro-Wilk) para verificar se o pressuposto de normalidade pode ser aceito.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rstudent</span>(ajuste), <span class="at">breaks =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01-anova_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">rstudent</span>(ajuste))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  rstudent(ajuste)
+W = 0.96696, p-value = 0.3828</code></pre>
+</div>
+</div>
+<p>Neste caso, o valor de <span class="math inline">\(p &gt; 0.05\)</span> indica não haver desvio da normalidade.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-logan2011biostatistical" class="csl-entry" role="doc-biblioentry">
+Logan, Murray. 2011. <em>Biostatistical Design and Analysis Using r: A Practical Guide</em>. John Wiley &amp; Sons.
+</div>
+<div id="ref-medleyclements1998" class="csl-entry" role="doc-biblioentry">
+Medley, C. N., and W. H. Clements. 1998. <span>“Responses of Diatom Communities to Heavy Metals in Streams: The Influence of Longitudinal Variation.”</span> <em>Ecological Applications</em> 9: 631–44.
+</div>
+<div id="ref-queen2002experimental" class="csl-entry" role="doc-biblioentry">
+Queen, Jerry P, Gerry P Quinn, and Michael J Keough. 2002. <em>Experimental Design and Data Analysis for Biologists</em>. Cambridge university press.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../qmd/01-anova/00-PART-anova.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Modelos de ANOVA</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../qmd/02-regressao/00-PART-regressao.html" class="pagination-link">
+        <span class="nav-page-text">Modelos de Regressão</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
