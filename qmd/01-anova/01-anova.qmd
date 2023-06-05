@@ -326,8 +326,6 @@ plt_igu | plt_diff
 A soma dos quadrados dentro dos grupos é a mesma nas duas figuras ($SQ_{Res} = `r SQ_Res_dfi`$). No entanto, na figura da esquerda, em que as médias dos tratamentos são similares (e consequentemente próximas à grande média), a soma dos quadrados entre os tratamentos é muito menor ($SQ_{Trat}^{esquerda} = `r SQ_Trat_dfi`$) que na figura da direita, em que as médias dos tratamentos estão distantes entre si ($SQ_{Trat}^{direita} = `r SQ_Trat_dfe`$). É desta forma que a partição das somas dos quadrados nos permite diferenciar situações em que: i - a média dos grupos **depende** dos níveis do tratamento (figura da direita); de situações em que ii - a média **não depende** dos níveis do tratamento (figura da esquerda). 
 
 
-
-
 ## Quadrados médios e graus de liberdade
 
 Para que os somatórios dos quadrados expressem uma medida de variação é necessário corriglos em função dos **graus de liberdade ($gl$)**, obtendo assim **Quadrados médios** dados abaixo:
@@ -531,7 +529,8 @@ As quantias acima são tradicionalmente expressas em uma **Tabela de ANOVA**.
 
 ```{r}
 #| code-fold: true
-anova_ex = anova(aov(DIVERSITY ~ ZINC, data = medley))
+aov_ex = aov(DIVERSITY ~ ZINC, data = medley)
+anova_ex = anova(aov_ex)
 ```
 
 ```{r}
@@ -559,7 +558,7 @@ A primeira linha refere-se aos valores associados aos tratamentos e a segunda li
 
 :::
 
-O valor de $p = `r anova_ex[[4]][1]`$ mostrado na @tbl-anova acima é refere-se à área na distribuição $F$ que fica acima de $F_{calculado}$. Poderíamos tentar representar este valor visualmente na distribuição $F$, mas ele é tão pequeno, que a área em vermelho sequer aparece na figura.
+O valor de $p = `r anova_ex[[5]][1]`$ mostrado na @tbl-anova acima é refere-se à área na distribuição $F$ que fica acima de $F_{calculado}$. Poderíamos tentar representar este valor visualmente na distribuição $F$, mas ele é tão pequeno, que a área em vermelho sequer aparece na figura.
 
 ```{r}
 #| echo: false
@@ -595,113 +594,91 @@ Fcurve = ggplot(data = dfF, mapping = aes(x = x)) +
   annotate(geom = 'text', x = anova_ex[[4]][1], y = 0.55, size = 8,
            color = 'gray', label = bquote("F"["calculado"])) +
   annotate(geom = 'text', x = lim + 1.2, y = 0.06, size = 6,
-           color = '#d14143', label = "Valor de p")
+           color = '#d14143', label = bquote('p' == .(anova_ex[[5]][1])))
 
 Fcurve
 ```
 
 Como conclusão temos que $p \le \alpha$ nos leva a **REJEITAR $H_0$**, pois $F_{calculado}$ é muito extremo para ser resultante da hipótese nula. Neste caso, assumimos que a $H_a$ é mais condizente com a estrutura dos dados, de modo que os tratamentos devem ser provenientes de populações estatísticas com diferentes médias $\mu$.
 
-## Testes a *posteriori* de comparação de médias
+## Testes a *posteriori* de comparação de médias: o teste de *Tukey*
 
-Tendo rejeitado $H_0$ concluímos que ao menos 1 par médias é diferente entre si, saber qual(is). Isto nos leva a buscar por um teste que permita fazer comparações **par-a-par**. Os testes a *posteriori* são uma alternativa.
+Tendo rejeitado $H_0$ concluímos que ao menos 1 par médias é diferente entre si, saber quais pares são estatisticamente diferentes . Isto nos leva a buscar por um teste que permita fazer comparações **par-a-par**. Os testes a *posteriori* são uma alternativa.
 
-Entre os diferentes testes a *posteriori* na literatura discutiremos o <a href="https://en.wikipedia.org/wiki/Tukey%27s_range_test" target="_blank">teste de Tukey</a>, em que o objetivo é estabelecer uma *Diferença Honesta Significativa* (*DHS*) entre um dado par de médias. Esta diferença pode ser calculada por:
+Entre os diferentes testes a *posteriori* na literatura discutiremos o <a href="https://en.wikipedia.org/wiki/Tukey%27s_range_test" target="_blank">teste de Tukey</a>, em que o objetivo é estabelecer uma *Diferença Honesta Significativa* (*DHS*) entre um dado par de médias. Data a diferença entre um par de médias e o erro padrão das diferenças de médias, a estatística do teste de Tukey é:
 
-$$DHS_{12} = q\sqrt{\left(\frac{1}{n_1} + \frac{1}{n_2}\right)QM_{Res}}$$
+$$q = \frac{\overline{Y}_1 - \overline{Y}_2}{SE}$$
+
+em que:
+
+$$SE = \sqrt{\frac{QM_{Res}}{2}(\frac{1}{n_1} + \frac{1}{n_2})}$$
 
 onde:
 
-$q$: é um valor retirado de uma **tabela estatística da distribuição de amplitude normalizada** (*studentized range q table*). Para um dado $\alpha$, o valor desejado de $q$ é encontrado cruzando a linha contento o número $k$ de tratamentos do experimento com a linha contendo os graus de liberdade do resíduo ($gl_{Res}$). Veja um exemplo desta tabela no link: <a href="https://www.real-statistics.com/statistics-tables/studentized-range-q-table/" target="_blank">Studentized Range q Table</a>;
+$q$: é e estatística do teste
+
+$\overline{Y}_1$: é a maior das médias do par consideraddo;
+
+$\overline{Y}_2$: é a menor das médias do par consideraddo
 
 $QM_{Res}$: é quadrado médio do resíduo obtido na ANOVA, e;
 
 $n_1$, $n_2$: os tamanhos amostrais de cada grupo envolvido na comparação.
 
-Para um dado nível de significância $\alpha$, a $DHS$ irá depender basicamente da variação residual do modelo de ANOVA e dos tamanhos amostrais de cada grupo. Em um experimento **balanceado**, isto é, onde $n_1 = n_2 = \cdots = n_k = n$, a diferença mínima para que um par de médias seja cosiderado diferente é sempre a mesma.
-
-Em nosso exemplo, a $DHS$ com $\alpha = 0.05$ irá depender se:
-
-i. estamos comparando pares em que os dois grupos têm $n = 8$ (BACK e LOW):
-
-```{r}
-#| echo: false
-n = 8
-q =  qtukey(p = 0.95, nmeans = 4, df = anova_ex[[1]][2])
-DHS1 = q * sqrt((1/n + 1/n)*anova_ex[[3]][2])
-```
+O valor crítico de $q$ pode ser obtido de uma **tabela estatística da distribuição de amplitude normalizada** (*studentized range q table*). Para um dado $\alpha$, o valor desejado de $q$ é encontrado cruzando a linha contento o número $k$ de tratamentos do experimento com a linha contendo os graus de liberdade do resíduo ($gl_{Res}$). Veja um exemplo desta tabela no link: <a href="https://www.real-statistics.com/statistics-tables/studentized-range-q-table/" target="_blank">Studentized Range q Table</a>.
 
 
-$DHS =  `r round(q,3)`\sqrt{\left(\frac{1}{`r n`} + \frac{1}{`r n`}\right)`r anova_ex[[3]][2]`} = `r round(DHS1, 3)`$
-
-ii. estamos comparando pares em que os dois grupos têm $n = 9$ (MED e HIGH):
+Em nosso exemplo, os valores de $q$ serão:
 
 ```{r}
 #| echo: false
-n = 9
-q =  qtukey(p = 0.95, nmeans = 4, df = anova_ex[[1]][2])
-DHS2 = q * sqrt((1/n + 1/n)*anova_ex[[3]][2])
-```
-
-
-$DHS =  `r round(q,3)`\sqrt{\left(\frac{1}{`r n`} + \frac{1}{`r n`}\right)`r anova_ex[[3]][2]`} = `r round(DHS2, 3)`$
-
-
-iii. estamos comparando pares em que um grupo tem $n = 8$ (BACK e LOW) e o outro $n = 9$ (MED e HIGH):
-
-```{r}
-#| echo: false
-n1 = 8
-n2 = 9
-q =  qtukey(p = 0.95, nmeans = 4, df = anova_ex[[1]][2])
-DHS3 = q * sqrt((1/n1 + 1/n2)*anova_ex[[3]][2])
-```
-
-
-$DHS =  `r round(q,3)`\sqrt{\left(\frac{1}{`r n1`} + \frac{1}{`r n2`}\right)`r anova_ex[[3]][2]`} = `r round(DHS3, 3)`$
-
-De todo modo, note que as diferenças ficam entre `r round(DHS2,3)` e `r round(DHS1,3)`.
-
-Em nosso exemplo, as médias dos grupos foram:
-
-```{r}
-#| code-fold: true
-Dm = medley %>% 
+medias <- medley %>% 
   group_by(ZINC) %>% 
-  summarize(Medias = mean(DIVERSITY))
+  summarise(Medias = round(mean(DIVERSITY),2))
+
+qmres <- anova_ex[2,3]
+nmeans = nlevels(medley$ZINC)
+dfres = anova_ex[2,1]
+qc = qtukey(p = 0.95, nmeans = 4, df = anova_ex[2,1])
+Tukey_tab <- TukeyHSD(aov_ex)$ZINC %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'combinacoes') %>% 
+  select(combinacoes,diff) %>% 
+  mutate(diff = abs(diff),
+         n1 = c(8,8,9,9,9,9),
+         n2 = c(8,8,8,8,8,9)) %>% 
+  mutate(se = sqrt(qmres/2 * (1/n1 + 1/n2))) %>% 
+  mutate(q = diff/se) %>% 
+  mutate(diff = round(diff,3),
+         se = round(se,3),
+         q = round(q, 3)) %>% 
+  mutate(H0 = case_when(q >= qc ~ 'Rejeita H0',
+                        .default = 'Aceita H0'))
+
+flextable(Tukey_tab) %>% 
+  width(width = 8) %>% 
+  bg(i = ~ q >= qc,
+     bg = "orange", part = "body")
 ```
 
-
-+ $\overline{Y}_{`r Dm[1,1]`} = `r Dm[1,2]`$
-
-+ $\overline{Y}_{`r Dm[2,1]`} = `r Dm[2,2]`$
-
-+ $\overline{Y}_{`r Dm[3,1]`} = `r Dm[3,2]`$
-
-+ $\overline{Y}_{`r Dm[4,1]`} = `r Dm[4,2]`$
-
-E as diferenças ($\overline{Y}_{maior} - \overline{Y}_{menor}$) entre elas:
-
-```{r}
-#| echo: false
-Ymean = tapply(medley$DIVERSITY, medley$ZINC, mean)
-Ymean_D = as.matrix(dist(Ymean))
-Ymean_D[upper.tri(Ymean_D)] = NA
-data.frame(ZINC = colnames(Ymean_D), Ymean_D) %>% flextable()
-```
+O limite crítico para o valor de $q$ tabelado é $q_{0.95,`r dfres`,30} = `r round(qc,3)`$ (veja em: <a href="https://www.real-statistics.com/statistics-tables/studentized-range-q-table/" target="_blank">Studentized Range q Table</a>), deste modo somente a comparação entre `r Tukey_tab[Tukey_tab[, 6] >=qc,1]` sugere ter médias significativamente diferentes.
 
 ## Ajustando a ANOVA no R
 
-Considere que a tabela em nosso exemplo está no objeto `Tab`. A ANOVA no R é feita com o comando `aov`.
+A ANOVA no R pode ser feita com o comando `aov`.
 
 ```{r}
 ajuste = aov(DIVERSITY ~ ZINC, data = medley)
 ajuste
 ```
 
-> A notação `Y ~ X` será muito utilizada nesta seção sobre modelos lineares e lê-se como **$Y$ é função de $X$**. 
+:::{.callout-tip}
+# Fórmula no R
+A notação de fórmula no R é escrita como: `Y ~ X`onde lê-se **$Y$ é função de $X$**. 
 
-O comando acima fez os cálculos da ANOVA, isto é, computou as somas dos quadrados, os graus de liberdade, os quadrados médios, o $F_{calculado}$ e o valor de $p$. Para visualizarmos a tabela da ANOVA fazemos:
+:::
+
+O comando acima fez os cálculos da ANOVA, isto é, computou as somas dos quadrados, os graus de liberdade, os quadrados médios, o $F_{calculado}$ e o valor de $p$. Para visualizarmos a tabela da ANOVA escrevemos:
 
 ```{r}
 anova(ajuste)
@@ -716,13 +693,13 @@ TukeyHSD(ajuste, conf.level = 1-alfa)
 
 O resultado apresenta todas as comparações possíveis entre os grupos, mostrando as diferenças de médias, seus intervalos de confiança a $95\%$ e os valores de $p$, indicando quais destas diferenças são significativas, isto é, $p \le \alpha$. Estes resultados nos permitem concluir novamente que somente o par `HIGH-LOW` difere entre si, pois  `p adj < 0.05`.
 
-Um gráfico facilita a visualização das comparações, sobretudo em situações com muitos pares de médias envolvidos:
+Um gráfico abaixo facilita a visualização das comparações, sobretudo em situações com muitos pares de médias envolvidos:
 
 ```{r}
 plot(TukeyHSD(ajuste))
 ```
 
-Neste gráfico, as comparações em que o intervalo de confiança **não inclui o zero**, são consideradas significativas. Novamente, vemos que somente o grupo `C-B` tem médias estatisticamente diferentes.
+Neste gráfico, as comparações em que o intervalo de confiança **não inclui o zero**, são consideradas estatisticamente significativas.
 
 ## Pressupostos da ANOVA
 
