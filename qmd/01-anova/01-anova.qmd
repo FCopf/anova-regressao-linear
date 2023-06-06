@@ -19,7 +19,7 @@ source('scripts/anova_sim.r')
 
 :::
 
-A *Análise de Variância* (**ANOVA**) desenvolvida por <a href="https://en.wikipedia.org/wiki/Ronald_Fisher" target="_blank">R. A. Fisher</a> aplica-se à uma classe de desenho experimental em que a variável resposta $Y$ é *contínua* e a variável explanatória $X$ é *categórica* com $2$ ou mais níveis. A ANOVA permite testarmos a hipótese de que duas ou mais médias amostrais ($\overline{Y}_i$) possam ter sido obtidas de uma mesma população estatística com média $\mu$. Alternativamente, podemos concluir que as médias amostrais diferem umas das outras, de tal forma que devemos assumir que foram amostradas a partir de **diferentes populações estatísticas**, nas quais ao menos um $\mu_i$ seja diferente dos demais. Iremos denominar estas duas possibilidades de **hipótese estatísticas** sobre a relação entre as médias populacionais. 
+A *Análise de Variância* (**ANOVA**) desenvolvida por <a href="https://en.wikipedia.org/wiki/Ronald_Fisher" target="_blank">R. A. Fisher</a> aplica-se à uma classe de desenho experimental em que a variável resposta $Y$ é *contínua* e a variável explanatória $X$ é *categórica* com $2$ ou mais níveis. A ANOVA nos permite testar a hipótese de que duas ou mais médias amostrais ($\overline{Y}_i$) tenham sido obtidas de uma mesma população estatística com média $\mu$. Alternativamente, podemos concluir que as médias amostrais diferem umas das outras, de tal forma que devemos assumir que foram amostradas a partir de **diferentes populações estatísticas**, nas quais ao menos um $\mu_i$ seja diferente dos demais. Iremos denominar estas duas possibilidades de **hipótese estatísticas** sobre a relação entre as médias populacionais. 
 
 ## O modelo da ANOVA e as hipóteses estatísticas
 
@@ -41,7 +41,7 @@ $H_a$: ao menos um par de médias é diferente (HIPÓTESE ALTERNATIVA)
 
 :::
 
-A hipótese nula ($H_0$) define a ausência de diferenças entre as médias populacionais enquanto a hipótese alternativa ($H_a$) refere-se a qualquer possibilidade diferente de $H_0$. Se temos exatamente dois níveis em $X$, a comparação de médias pode ser feita por meio de um teste $t$. A ANOVA deve ser utilizada quando temos **mais** de dois níveis em $X$. Neste sentido, o teste $t$ é um caso particular da ANOVA.
+A hipótese nula ($H_0$) define a ausência de diferenças entre as médias populacionais enquanto a hipótese alternativa ($H_a$) refere-se a qualquer possibilidade diferente de $H_0$. Se temos exatamente dois níveis em $X$, a comparação de médias pode ser feita por meio de um teste $t$. Por outro lado, quando temos **mais** de dois níveis em $X$, devemos utilizar o modelo de ANOVA.
 
 ## Partição das Soma dos Quadrados
 
@@ -95,9 +95,9 @@ plt_df1 | plt_df2 | plt_df3
 
 ```
 
-Na figura $A$ todos os grupos são provenientes da mesma distribuição e têm médias aproximadamente iguais ($\overline{Y}_A \approx  \overline{Y}_B \approx \overline{Y}_C \approx \overline{Y}_D$). Na figura $B$ o segundo grupo tem média mais elevada que os demais, e na da figura $C$, todas as médias parecem ser diferentes entre si ($\overline{Y}_A \ne  \overline{Y}_B \ne \overline{Y}_C \ne \overline{Y}_D$).
+Na figura $A$ todos os grupos são provenientes da mesma distribuição e têm médias aproximadamente iguais ($\overline{Y}_A \approx  \overline{Y}_B \approx \overline{Y}_C \approx \overline{Y}_D$) e as diferenças são provinientes unicamente da variabilidade amostral. Na figura $B$ o segundo grupo tem média mais elevada que os demais, enquanto na figura $C$, todas as médias parecem ser diferentes entre si ($\overline{Y}_A \ne  \overline{Y}_B \ne \overline{Y}_C \ne \overline{Y}_D$).
 
-Para mensurar o grau de associação entre $Y$ e $X$ e entender como podemos diferenciar as situações acima, vamos introduzir o processo de **Partição da Soma dos Quadrados**. 
+Para mensurar o grau de associação entre $Y$ e $X$ de modo a diferenciar as situações acima, vamos introduzir o processo de **Partição da Soma dos Quadrados**. 
 
 Suponha a situção abaixo:
 
@@ -188,7 +188,7 @@ plt_dfe +
 
 Em seguida, precisamos calcular $3$ quantias, a **Soma dos Quadrados Totais** ($SQ_{Total}$), a **Soma dos Quadrados dos Tratamentos** $SQ_{Trat}$ e a **Soma dos Quadrados dos Resíduos** $SQ_{Res}$.
 
-i. **Soma dos Quadrados Totais** $SQ_{Total}$: mede as diferenças entre $Y_{ij}$ e $\overline{\overline{Y}}$. Temos nesta expressão o somatório dos desvios ao quadrado de todas as observações com relação à grand, fig.align='center', fig.width=8, fig.height=4e média **independente** do grupo de origem de cada observação.
+i. **Soma dos Quadrados Totais** $SQ_{Total}$: mede as diferenças entre $Y_{ij}$ e $\overline{\overline{Y}}$. Temos nesta expressão o somatório dos desvios ao quadrado de todas as observações com relação à grande média **independente** do grupo de origem de cada observação.
 
 $$SQ_{Total} = \sum_{j = 1}^{k}\sum_{i = 1}^{n}(Y_{ij} - \overline{\overline{Y}})^2$$
 
@@ -328,7 +328,7 @@ A soma dos quadrados dentro dos grupos é a mesma nas duas figuras ($SQ_{Res} = 
 
 ## Quadrados médios e graus de liberdade
 
-Para que os somatórios dos quadrados expressem uma medida de variação é necessário corriglos em função dos **graus de liberdade ($gl$)**, obtendo assim **Quadrados médios** dados abaixo:
+Para que os somatórios dos quadrados expressem uma medida de variação é necessário corrigi-los em função dos **graus de liberdade ($gl$)**, obtendo assim os **Quadrados médios** conforme abaixo:
 
 i. **Quadrado Médio Total ($QM_{Total}$)**
 
@@ -352,7 +352,7 @@ Assim como a soma dos quadrados, os graus de liberdade também têm característ
 
 $$gl_{Total} = gl_{Trat} + gl_{Res} = (k - 1) + (N - K) = N - 1$$
 
-Os quadrados médios que são estimativas de variâncias. Compare por exemplo a expressão do $QM_{Total}$ com a fórmula da variância amostral ($s^2$)) e verá que excetuando mudanças de notação, as expressões são essencialmente as mesmas.
+Os quadrados médios que são estimativas de variâncias. Compare por exemplo a expressão do $QM_{Total}$ com a fórmula da variância amostral ($s^2$) e verá que excetuando mudanças de notação, as expressões são essencialmente as mesmas.
 
 ## Estatística $F$ e teste de hipóteses
 
@@ -360,7 +360,7 @@ Uma vez que os quadrados médios são estimativas de variância, uma estatístic
 
 $$F_{calculado} = \frac{QM_{Trat}}{QM_{Res}}$$
 
-A estatística $F$ (ou razão-$F$) está associada à **distribuição de probabilidades $F$** e nos permite comparar a variância associada ao tratamento com a variância associada aos resíduos. Em mãos do valor de $F_{calculado}$, o teste de hipóteses é possível após a definição do **nível de significância** $\alpha$. 
+A estatística $F$ (ou razão-$F$) está associada à **distribuição de probabilidades $F$** e nos permite comparar a variância associada ao tratamento com a variância associada aos resíduos. Com o valor de $F_{calculado}$, o teste de hipóteses é possível após a definição do **nível de significância** $\alpha$. 
 
 ### Nível de significância
 
@@ -419,7 +419,7 @@ Fcurve = ggplot(data = dfF, mapping = aes(x = x)) +
 Fcurve
 ```
 
-Tradicionalmente utiliza-se $\alpha = 0.05$. Neste caso, $H_0$ seria rejeitada somente de $p \le 0.05$. Algumas área da medicina por eoutro lado, são tradicionais por utilizar valores de $\alpha = 0.01$, o que torna o experimento menos sujeito ao **erro do tipo I**. Portanto, outros valores de $\alpha$ diferentes de $0.05$ podem ser escolhidos. O fundamental é que esta decisão, isto é, sobre o nível de significância $\alpha$ a ser adotado, seja feita **previamente** à obtenção dos dados.  
+Tradicionalmente utiliza-se $\alpha = 0.05$. Neste caso, $H_0$ seria rejeitada somente de $p \le 0.05$. Em algumas situações podemos utilizar $\alpha = 0.01$, o que torna o experimento mais rigoroso, isto é, menos propenso ao **erro do tipo I**.
 
 ## Um exemplo de ANOVA: os níveis de metais pesados afetam a diversidade de espécies?
 
@@ -457,9 +457,9 @@ medley %>% flextable()
 medley %>% flextable()
 ```
 
-A coluna `r var_medley[1]` é uma variável categórica contendo o nome dos $`r n_stream`$ riachos amostrados (`r paste(stream_levels, collapse = ', ')`). A coluna `r var_medley[2]` é uma variável categórica ordinal com $`r n_zinc`$ níveis de concentração de zinco na água (`r paste(zinc_levels, collapse = ' < ')`). O primeiro nível (`r zinc_levels[1]`) é o nível de referência (**BACKGROUND**). Finalmente, a coluna `r var_medley[3]` é uma variável contínua que contém a diversidade de diatomácieas (medida pelo índice de diversidade de [Shannon](https://pt.wikipedia.org/wiki/%C3%8Dndice_de_Shannon){target="_blank"} medida de cada uma das `r nrow(medley)` amostras.
+A coluna `r var_medley[1]` é uma variável categórica contendo o nome dos $`r n_stream`$ riachos amostrados (`r paste(stream_levels, collapse = ', ')`). A coluna `r var_medley[2]` é uma variável categórica ordinal com $`r n_zinc`$ níveis de concentração de zinco na água (`r paste(zinc_levels, collapse = ' < ')`). O primeiro nível (`r zinc_levels[1]`) é o nível de referência. Finalmente, a coluna `r var_medley[3]` é uma variável contínua que contém a diversidade de diatomácieas medida pelo índice de [Shannon](https://pt.wikipedia.org/wiki/%C3%8Dndice_de_Shannon){target="_blank"} em cada uma das `r nrow(medley)` amostras.
 
-Vamos nos concentrar nas variáveis `r var_medley[3]` e `r var_medley[2]`. `r var_medley[3]` será a variável resposta. Em delineamento experimental, dizemos que `r var_medley[2]` é um **tratamento**, isto é, uma condição experimental sob a qual nossa variável dependente $Y$ foi mensurada. 
+Vamos nos concentrar nas variáveis `r var_medley[3]` e `r var_medley[2]`. `r var_medley[3]` será a variável resposta. Dizemos que `r var_medley[2]` é um **tratamento**, isto é, uma condição experimental (ou observacional) sob a qual a variável dependente $Y$ foi medida. 
 
 Para verificarmos a distribuição de diversidade para cada concentração de zinco vamos fazer um boxplot da variável `DIVERSITY` em função de `ZINC`.
 
@@ -472,7 +472,7 @@ ggplot(medley) +
 
 ```
 
-Vemos que a concentração alta aparenta ter menor diversidade que as demais concentralções. A ANOVA nos permitirá testar esta suposição.
+Vemos que a concentração HIGH aparenta ter menor diversidade que as demais concentralções. A ANOVA nos permitirá testar esta suposição.
 
 :::{.callout-note}
 
@@ -558,13 +558,15 @@ A primeira linha refere-se aos valores associados aos tratamentos e a segunda li
 
 :::
 
-O valor de $p = `r anova_ex[[5]][1]`$ mostrado na @tbl-anova acima é refere-se à área na distribuição $F$ que fica acima de $F_{calculado}$. Poderíamos tentar representar este valor visualmente na distribuição $F$, mas ele é tão pequeno, que a área em vermelho sequer aparece na figura.
+O valor de $p = `r anova_ex[[5]][1]`$ mostrado na @tbl-anova refere-se à área na distribuição $F$ que fica acima de $F_{calculado}$ e que está representado em vermelho na @fig-Fdist-medley.
 
 ```{r}
 #| echo: false
 #| fig-align: 'center'
 #| fig-width: 8
 #| fig-height: 5
+#| label: fig-Fdist-medley
+#| fig-cap: 'Distribuição F com indicação do valor de p.'
 glnon <- anova_ex[[1]][1]
 glden <- anova_ex[[1]][2]
 
@@ -599,13 +601,13 @@ Fcurve = ggplot(data = dfF, mapping = aes(x = x)) +
 Fcurve
 ```
 
-Como conclusão temos que $p \le \alpha$ nos leva a **REJEITAR $H_0$**, pois $F_{calculado}$ é muito extremo para ser resultante da hipótese nula. Neste caso, assumimos que a $H_a$ é mais condizente com a estrutura dos dados, de modo que os tratamentos devem ser provenientes de populações estatísticas com diferentes médias $\mu$.
+Ao verificar que $p \le \alpha$, nossa conclusão deve ser de **REJEITAR $H_0$**, pois $F_{calculado}$ é muito extremo para ser resultante da hipótese nula. Neste caso, assumimos que a $H_a$ é mais condizente com a estrutura dos dados, de modo que os tratamentos devem ser provenientes de populações estatísticas com diferentes médias $\mu$.
 
 ## Testes a *posteriori* de comparação de médias: o teste de *Tukey*
 
-Tendo rejeitado $H_0$ concluímos que ao menos 1 par médias é diferente entre si, saber quais pares são estatisticamente diferentes . Isto nos leva a buscar por um teste que permita fazer comparações **par-a-par**. Os testes a *posteriori* são uma alternativa.
+Tendo rejeitado $H_0$ concluímos que ao menos 1 par médias é diferente entre si. Nos resta saber quais pares são estatisticamente diferentes, o que nos leva a buscar por um teste que permita fazer comparações **par-a-par**. Os testes a *posteriori* são uma alternativa.
 
-Entre os diferentes testes a *posteriori* na literatura discutiremos o <a href="https://en.wikipedia.org/wiki/Tukey%27s_range_test" target="_blank">teste de Tukey</a>, em que o objetivo é estabelecer uma *Diferença Honesta Significativa* (*DHS*) entre um dado par de médias. Data a diferença entre um par de médias e o erro padrão das diferenças de médias, a estatística do teste de Tukey é:
+Entre os diferentes testes a *posteriori* na literatura discutiremos o <a href="https://en.wikipedia.org/wiki/Tukey%27s_range_test" target="_blank">teste de Tukey</a>, em que o objetivo é estabelecer uma *Diferença Honesta Significativa* (*DHS*) entre um dado par de médias. Considerando a diferença entre um par de médias e o erro padrão das diferenças de médias, a estatística do teste de Tukey é:
 
 $$q = \frac{\overline{Y}_1 - \overline{Y}_2}{SE}$$
 
@@ -628,7 +630,7 @@ $n_1$, $n_2$: os tamanhos amostrais de cada grupo envolvido na comparação.
 O valor crítico de $q$ pode ser obtido de uma **tabela estatística da distribuição de amplitude normalizada** (*studentized range q table*). Para um dado $\alpha$, o valor desejado de $q$ é encontrado cruzando a linha contento o número $k$ de tratamentos do experimento com a linha contendo os graus de liberdade do resíduo ($gl_{Res}$). Veja um exemplo desta tabela no link: <a href="https://www.real-statistics.com/statistics-tables/studentized-range-q-table/" target="_blank">Studentized Range q Table</a>.
 
 
-Em nosso exemplo, os valores de $q$ serão:
+Em nosso exemplo, os valores de $q$ entre os pares de médias serão:
 
 ```{r}
 #| echo: false
@@ -661,7 +663,7 @@ flextable(Tukey_tab) %>%
      bg = "orange", part = "body")
 ```
 
-O limite crítico para o valor de $q$ tabelado é $q_{0.95,`r dfres`,30} = `r round(qc,3)`$ (veja em: <a href="https://www.real-statistics.com/statistics-tables/studentized-range-q-table/" target="_blank">Studentized Range q Table</a>), deste modo somente a comparação entre `r Tukey_tab[Tukey_tab[, 6] >=qc,1]` sugere ter médias significativamente diferentes.
+O limite crítico para o valor de $q$ tabelado é $q_{0.95,`r dfres`,`r nmeans`} = `r round(qc,3)`$ (veja em: <a href="https://www.real-statistics.com/statistics-tables/studentized-range-q-table/" target="_blank">Studentized Range q Table</a>), deste modo somente a comparação entre `r Tukey_tab[Tukey_tab[, 6] >=qc,1]` sugere ter médias significativamente diferentes.
 
 ## Ajustando a ANOVA no R
 
@@ -672,7 +674,7 @@ ajuste = aov(DIVERSITY ~ ZINC, data = medley)
 ajuste
 ```
 
-:::{.callout-tip}
+:::{.callout-note}
 # Fórmula no R
 A notação de fórmula no R é escrita como: `Y ~ X`onde lê-se **$Y$ é função de $X$**. 
 
@@ -684,36 +686,37 @@ O comando acima fez os cálculos da ANOVA, isto é, computou as somas dos quadra
 anova(ajuste)
 ```
 
-Note que os resultados coincidem com o que apresentamos anteriormente. Como o valor de $p$ foi menor que $\alpha = 0.05$, concluimos que a ANOVA foi significativa, isto é, indicou que ao menos um par de médias difere ente si. Podemos fazer o teste a *posteriori* de Tukey com o comando:
+Note que os resultados coincidem com o que apresentamos anteriormente. Como o valor de $p$ foi menor que $\alpha = 0.05$, concluimos que a ANOVA foi significativa, isto é, indicou que ao menos um par de médias difere entre si. Podemos fazer o teste a *posteriori* de Tukey com o comando:
 
 ```{r}
 alfa = 0.05
 TukeyHSD(ajuste, conf.level = 1-alfa)
 ```
 
-O resultado apresenta todas as comparações possíveis entre os grupos, mostrando as diferenças de médias, seus intervalos de confiança a $95\%$ e os valores de $p$, indicando quais destas diferenças são significativas, isto é, $p \le \alpha$. Estes resultados nos permitem concluir novamente que somente o par `HIGH-LOW` difere entre si, pois  `p adj < 0.05`.
+O resultado apresenta todas as comparações possíveis entre os grupos, mostrando as diferenças de médias, seus intervalos de confiança a $95\%$ e os valores de $p$, indicando quais destas diferenças são significativas ($p \le \alpha$). Nvamente, estes resultados nos permitem concluir que somente o par `HIGH-LOW` difere entre si, pois  `p adj < 0.05`.
 
-Um gráfico abaixo facilita a visualização das comparações, sobretudo em situações com muitos pares de médias envolvidos:
+O gráfico abaixo facilita a visualização das comparações, sobretudo em situações com muitos pares de médias envolvidos:
 
 ```{r}
 plot(TukeyHSD(ajuste))
 ```
 
-Neste gráfico, as comparações em que o intervalo de confiança **não inclui o zero**, são consideradas estatisticamente significativas.
+Neste gráfico, são consideradas estatisticamente significativas as comparações em que o intervalo de confiança **não inclui o zero**.
 
 ## Pressupostos da ANOVA
 
 Os pressupostos da ANOVA são:
 
-1. Os observação são independentes e;
+1. As observações são independentes e;
 
 2. A variância dos resíduos é homogênea e;
 
-3. Os resíduos têm distribuição normal com média $0$ e variância $\sigma^2$.
+3. Os resíduos têm distribuição normal com média $0$ e variância consante $\sigma^2$.
 
 Vamos inicialmente testar o pressuposto de homogeneidade de variâncias com um teste $F$. 
 
 ```{r}
+#| echo: false
 v = tapply(medley$DIVERSITY, medley$ZINC, var)
 var_max = max(v)
 var_min = min(v)
@@ -721,9 +724,9 @@ var_min = min(v)
 ```
 
 ```{r}
-#| eval: false
 medley %>% group_by(ZINC) %>% 
-  summarise(Var = var(DIVERSITY))
+  summarise(Var = var(DIVERSITY)) %>% 
+  flextable()
 ```
 
 Note que a maior variância é $`r var_max`$ e a menor $`r var_min`$.
@@ -731,7 +734,9 @@ Note que a maior variância é $`r var_max`$ e a menor $`r var_min`$.
 O teste $F$ consiste em dividir a maior variância pela menor:
 
 ```{r}
-var.test(medley$DIVERSITY[medley$ZINC == "MED"], medley$DIVERSITY[medley$ZINC == "HIGH"])
+vmax = medley$DIVERSITY[medley$ZINC == "MED"]
+vmin = medley$DIVERSITY[medley$ZINC == "HIGH"]
+var.test(vmax, vmin)
 ```
 
 A maior variância foi `r round(var_max/var_min, 2)` vezes maior que a menor variância e o test F sugere que esta diferença é **não-significativa** a $5\%$  ($p < 0.05$). Isto indica que as variâncias são homogêneas.
